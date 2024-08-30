@@ -1,2 +1,2 @@
-# Coc-s
+# Cocks
 App de receitas de bebidas
