@@ -137,25 +137,23 @@ struct TesteResponse: Codable {
 }
 
 struct Teste: Codable {
-    let strDrink: String?
-    let strDrinkThumb: String?
-    let idDrink: String?
+    let strDrink: String
+    let strDrinkThumb: String
+    let idDrink: String
 }
 
 func getTeste(tipo: String) async throws -> [Teste] {
-    let urlString = tipo
-    guard let url = URL(string: urlString) else {
+    guard let url = URL(string: tipo) else {
         throw GHError.invalidURL
     }
-    
-    let (data, _) = try await URLSession.shared.data(from: url)
-    
-    // Debug: Exibe o JSON recebido
-//    print("Dados recebidos: \(String(decoding: data, as: UTF8.self))")
-    
-    let decoder = JSONDecoder()
-    let response = try decoder.decode(TesteResponse.self, from: data)
-    return response.drinks
+    do {
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let decoder = JSONDecoder()
+        let response = try decoder.decode(TesteResponse.self, from: data)
+        return response.drinks
+    } catch {
+        throw GHError.networkError
+    }
 }
 
 func getDrinkId(id: String) async throws -> [Drink] {
@@ -223,6 +221,7 @@ enum GHError: Error {
     case invalidURL
     case invalidResponse
     case invalidData
+    case networkError
 }
 
 

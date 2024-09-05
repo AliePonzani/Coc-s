@@ -68,9 +68,8 @@ struct FavoritesCard: View {
     private func teste() async {
         do {
             drink = try await getDrinkId(id: idDrink)
-            print("entrou na favoritos")
         } catch {
-            print("\(idDrink) Erro na favoritoscard: \(error)")
+            print("Erro na FavoritesCard: \(error)")
         }
     }
 }

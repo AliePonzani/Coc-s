@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct RecipeView: View {
-    @State private var drink: [Drink] = []
-    let idDrink: String
+    var drink: [Drink]
     var body: some View {
         ScrollView{
             ForEach(drink, id: \.idDrink){drink in
@@ -32,7 +31,7 @@ struct RecipeView: View {
                         HStack(alignment: .center, spacing: 20.0){
                             ForEach(drink.getIngredientes(), id: \.1) {
                                 (medida, ingredient) in
-                                FilterCards(name: ingredient,tipo: "i", urlImage: "https://www.thecocktaildb.com/images/ingredients/\(ingredient).png")
+                                FilterCards(name: ingredient, tipo: "i")
                             }
                         }
                         .frame(height: 130)
@@ -43,7 +42,7 @@ struct RecipeView: View {
                             Text("Glass")
                                 .font(.title2)
                                 .foregroundColor(Color("Principal"))
-                            FilterCards(name: drink.strGlass ?? "",tipo: "g", image: drink.strGlass)
+                            FilterCards(name: drink.strGlass ?? "",tipo: "g")
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         .padding()
@@ -64,19 +63,16 @@ struct RecipeView: View {
                 }
             }
             .scrollContentBackground(/*@START_MENU_TOKEN@*/.automatic/*@END_MENU_TOKEN@*/)
-        }.task {
-            await teste()
         }
         
     }
-    private func teste() async {
-        do {
-            drink = try await getDrinkId(id: idDrink)
-            print("entrou na receita")
-        } catch {
-            print("\(idDrink) Erro na Receitas: \(error)")
-        }
-    }
+//    private func teste() async {
+//        do {
+//            drink = try await getDrinkId(id: idDrink)
+//        } catch {
+//            print("\(idDrink) Erro na Receitas: \(error)")
+//        }
+//    }
 }
 
 //#Preview {

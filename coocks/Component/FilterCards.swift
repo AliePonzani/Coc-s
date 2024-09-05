@@ -10,31 +10,30 @@ import SwiftUI
 struct FilterCards: View {
     var name: String
     var tipo: String
-    var urlImage: String?
-    var image: String?
-    @State private var drinks: [Teste] = []
+    @State private var urlImage: String = ""
+    @State private var image: String = ""
+    @State private var ids: [String] = []
     
     var body: some View {
         NavigationLink(
-            destination: ListCocktailsView2(listDrinks: drinks)
+            destination: ListCocktailsView(listId: ids)
         ) {
             VStack {
-                if let urlImage = urlImage, let _ = URL(string: urlImage) {
-                    AsyncImage(url: URL(string: urlImage)) { image in
+                if tipo == "i"{
+                    AsyncImage(url: URL(string: "https://www.thecocktaildb.com/images/ingredients/\(urlImage).png")) { image in
                         image
                             .resizable()
                             .scaledToFit()
-                        //                            .frame(maxHeight: .infinity)
                             .cornerRadius(8)
                     } placeholder: {
                         ProgressView()
                             .frame(width: 150, height: 150, alignment: .center)
                     }
-                }else if let image = image {
+                } else{
+                    let sanitizedCategory = image.replacingOccurrences(of: "/", with: "")
                     Image(image)
                         .resizable()
                         .scaledToFit()
-//                        .frame(width: 100, height: 100)
                         .cornerRadius(8)
                 }
                 Text(name)
@@ -44,18 +43,19 @@ struct FilterCards: View {
             }
             .scaledToFill()
         }.task {
-            await teste()
+            await fetchIds()
         }
         .frame(maxHeight: .infinity)
     }
-    private func teste() async {
+    private func fetchIds() async {
         do {
-            drinks = try await getTeste(tipo: "https://www.thecocktaildb.com/api/json/v1/1/filter.php?\(tipo)=\(name)".replacingOccurrences(of: " ", with: "%20"))
+            let url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?\(tipo)=\(name)"
+            let drinks = try await getTeste(tipo: url)
+            ids = drinks.map { $0.idDrink }
         } catch {
             print("Erro no FilterCards: \(error)")
         }
     }
-    
 }
 
 

@@ -1,18 +1,18 @@
 import SwiftUI
 
 struct DrinkCard: View {
-    let imagem: String
-    let texto: String
-    let idDrink: String
+    @State private var drinkInfo: [Drink] = []
     @ObservedObject var favoritesManager: FavoritesManager
     @State private var isLiked = false
+    //recebe
+    let idDrink: String
     
     var body: some View {
-        NavigationLink(destination: RecipeView(
-            idDrink: idDrink)){
+        NavigationLink(destination: RecipeView(drink: drinkInfo)){
+            ForEach(drinkInfo, id: \.idDrink){drink in
                 VStack {
                     ZStack(alignment: .topTrailing) {
-                        AsyncImage(url: URL(string: imagem)) { image in
+                        AsyncImage(url: URL(string: drink.strDrink)) { image in
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
@@ -41,7 +41,7 @@ struct DrinkCard: View {
                         }
                     }
                     
-                    Text(texto)
+                    Text(drink.strDrink)
                         .font(.system(size: 18))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -54,12 +54,14 @@ struct DrinkCard: View {
                     Task {
                         do {
                             isLiked = favoritesManager.favorites.contains(idDrink)
+                            drinkInfo = try await getDrinkId(id: idDrink)
                         } catch {
                             print("Erro ao carregar drink: \(error)")
                         }
                     }
                 }
             }
+        }
     }
 }
 
