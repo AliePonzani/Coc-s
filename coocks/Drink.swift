@@ -140,6 +140,12 @@ struct Teste: Codable {
     let strDrink: String
     let strDrinkThumb: String
     let idDrink: String
+    
+    func get() async throws -> [Drink]  {
+        var drink: [Drink] = []
+        drink = try await getDrinkId(id: idDrink)
+        return drink
+    }
 }
 
 func getTeste(tipo: String) async throws -> [Teste] {

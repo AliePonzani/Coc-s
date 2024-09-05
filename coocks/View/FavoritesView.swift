@@ -8,19 +8,21 @@
 import SwiftUI
 
 struct FavoritesView: View {
-    @StateObject private var favoritesManager = FavoritesManager()
-    private let adaptiveColumn = [GridItem(.adaptive(minimum: 150))]
-    
+//    @StateObject private var favoritesManager = FavoritesManager()
+//    private let adaptiveColumn = [GridItem(.adaptive(minimum: 150))]
+//    
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: adaptiveColumn, spacing: 8) {
-                ForEach(favoritesManager.favorites, id: \.self) { favorit in
-                    FavoritesCard(idDrink: favorit, favoritesManager: favoritesManager)
-                }
-            }
-            .padding()
-        }
+//        ScrollView {
+//            LazyVGrid(columns: adaptiveColumn, spacing: 8) {
+//                ForEach(favoritesManager.favorites, id: \.self) { favorit in
+//                    FavoritesCard(idDrink: favorit, favoritesManager: favoritesManager)
+//                }
+//            }
+//            .padding()
+//        }
+    Text("favoritos")
     }
+    
 }
 
 #Preview {

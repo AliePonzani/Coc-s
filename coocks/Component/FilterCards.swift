@@ -13,6 +13,7 @@ struct FilterCards: View {
     @State private var urlImage: String = ""
     @State private var image: String = ""
     @State private var ids: [String] = []
+    @State private var drinkss: [[Drink]] = []
     
     var body: some View {
         NavigationLink(
@@ -20,7 +21,7 @@ struct FilterCards: View {
         ) {
             VStack {
                 if tipo == "i"{
-                    AsyncImage(url: URL(string: "https://www.thecocktaildb.com/images/ingredients/\(urlImage).png")) { image in
+                    AsyncImage(url: URL(string: "https://www.thecocktaildb.com/images/ingredients/\(name).png")) { image in
                         image
                             .resizable()
                             .scaledToFit()
@@ -30,8 +31,8 @@ struct FilterCards: View {
                             .frame(width: 150, height: 150, alignment: .center)
                     }
                 } else{
-                    let sanitizedCategory = image.replacingOccurrences(of: "/", with: "")
-                    Image(image)
+                    let sanitizedCategory = name.replacingOccurrences(of: "/", with: "")
+                    Image(sanitizedCategory)
                         .resizable()
                         .scaledToFit()
                         .cornerRadius(8)
@@ -51,9 +52,14 @@ struct FilterCards: View {
         do {
             let url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?\(tipo)=\(name)"
             let drinks = try await getTeste(tipo: url)
+//            for drink in drinks {
+//                let add = try await getDrinkId(id: drink.idDrink)
+//                drinkss.append(add)
+//            }
             ids = drinks.map { $0.idDrink }
         } catch {
-            print("Erro no FilterCards: \(error)")
+            ids = []
+//            print("Erro no FilterCards: \(error)")
         }
     }
 }
